@@ -1,0 +1,62 @@
+[project]
+name = "meeting-transcribe"
+version = "0.1.0"
+description = "Turn meeting recordings into speaker-labelled transcripts and evidence-grounded summaries."
+readme = "README.md"
+requires-python = ">=3.14"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Horatiu Negutoiu", email = "pypi@horatiu.ca" },
+]
+maintainers = [
+    { name = "Horatiu Negutoiu", email = "pypi@horatiu.ca" },
+]
+keywords = ["cli", "meeting", "openai", "summarization", "transcription"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Text Processing",
+]
+dependencies = [
+    "openai>=1.66.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/horatiu-negutoiu/meeting-scribe"
+Repository = "https://github.com/horatiu-negutoiu/meeting-scribe"
+Issues = "https://github.com/horatiu-negutoiu/meeting-scribe/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+meeting-scribe = "meeting_scribe.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/meeting_scribe"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/LICENSE",
+    "/README.md",
+    "/docs",
+    "/pyproject.toml",
+    "/src/meeting_scribe",
+    "/tests",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
