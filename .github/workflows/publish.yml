@@ -74,17 +74,57 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
 
-      - name: Install the TestPyPI release in a clean environment
+      - name: Wait for and smoke-test the TestPyPI release
         shell: bash
         run: |
           package_version="${GITHUB_REF_NAME#v}"
-          python -m venv smoke-test-venv
-          smoke-test-venv/bin/python -m pip install --upgrade pip
-          smoke-test-venv/bin/python -m pip install \
-            --index-url https://test.pypi.org/simple/ \
-            --extra-index-url https://pypi.org/simple/ \
-            "meeting-transcribe==${package_version}"
-          smoke-test-venv/bin/meeting-scribe --help
+          timeout_seconds=180
+          retry_interval_seconds=10
+          started_at=$SECONDS
+          attempt=1
+
+          python -c 'import sys; assert sys.version_info[:2] == (3, 14), sys.version'
+
+          while :; do
+            elapsed_seconds=$((SECONDS - started_at))
+            remaining_seconds=$((timeout_seconds - elapsed_seconds))
+            if (( remaining_seconds <= 0 )); then
+              echo "::error title=TestPyPI smoke test timed out::meeting-transcribe==${package_version} was not installable from TestPyPI after ${timeout_seconds} seconds."
+              exit 1
+            fi
+
+            smoke_test_venv="$(mktemp -d)"
+            trap 'rm -rf "$smoke_test_venv"' EXIT
+            echo "TestPyPI install attempt ${attempt}: waiting up to ${remaining_seconds}s for meeting-transcribe==${package_version}."
+            python -m venv "$smoke_test_venv"
+
+            if timeout "${remaining_seconds}s" "$smoke_test_venv/bin/python" -m pip install \
+              --no-cache-dir \
+              --index-url https://test.pypi.org/simple/ \
+              --extra-index-url https://pypi.org/simple/ \
+              "meeting-transcribe==${package_version}"; then
+              echo "TestPyPI install attempt ${attempt} succeeded."
+              "$smoke_test_venv/bin/meeting-scribe" --help
+              exit 0
+            fi
+
+            rm -rf "$smoke_test_venv"
+            trap - EXIT
+            elapsed_seconds=$((SECONDS - started_at))
+            remaining_seconds=$((timeout_seconds - elapsed_seconds))
+            if (( remaining_seconds <= 0 )); then
+              echo "::error title=TestPyPI smoke test timed out::meeting-transcribe==${package_version} was not installable from TestPyPI after ${timeout_seconds} seconds."
+              exit 1
+            fi
+
+            sleep_seconds=$retry_interval_seconds
+            if (( sleep_seconds > remaining_seconds )); then
+              sleep_seconds=$remaining_seconds
+            fi
+            echo "TestPyPI install attempt ${attempt} failed; retrying in ${sleep_seconds}s (${remaining_seconds}s remain)."
+            sleep "$sleep_seconds"
+            ((attempt += 1))
+          done
 
   publish-pypi:
     name: Publish release artifacts to PyPI

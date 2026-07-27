@@ -1,6 +1,6 @@
 [project]
 name = "meeting-transcribe"
-version = "0.1.1"
+version = "0.1.2"
 description = "Turn meeting recordings into speaker-labelled transcripts and evidence-grounded summaries."
 readme = "README.md"
 requires-python = ">=3.14"

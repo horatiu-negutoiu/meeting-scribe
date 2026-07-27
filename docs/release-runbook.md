@@ -45,8 +45,9 @@ token for this project.
    ```
 
 5. Watch the `Publish to PyPI` GitHub Actions run. It verifies the tag,
-   tests, builds, validates artifacts, uploads them to TestPyPI, then installs
-   the TestPyPI package in a clean environment and runs
+   tests, builds, validates artifacts, uploads them to TestPyPI, waits for the
+   exact version to appear in its index, then installs the package in a clean
+   environment and runs
    `meeting-scribe --help`.
 6. Review the TestPyPI job. The production job also checks immediately before
    upload that `meeting-transcribe` is still unclaimed on PyPI. Approve the

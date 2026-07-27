@@ -264,8 +264,9 @@ uv pip install --python /tmp/meeting-transcribe-sdist-check/bin/python '.[dev]'
 
 Continuous integration runs the test suite, builds both distribution artifacts,
 and validates their package metadata on every push and pull request. The
-tag-triggered release workflow publishes first to TestPyPI, performs a clean
-installation smoke test, then waits for approval before the PyPI upload. Follow
+tag-triggered release workflow publishes first to TestPyPI, waits for its index
+to expose the exact release, performs a clean installation smoke test, then
+waits for approval before the PyPI upload. Follow
 the [release runbook](docs/release-runbook.md) for the one-time Trusted
 Publishing setup, release procedure, verification, and remediation steps.
 
@@ -279,7 +280,8 @@ generation, and atomic Markdown artifact creation with a fake SDK client.
 
 ## Releases and versioning
 
-The first production PyPI release is `0.1.1`; `0.1.0` is TestPyPI-only. Meeting
+The first production PyPI release is `0.1.2`; `0.1.0` and `0.1.1` are
+TestPyPI-only. Meeting
 Scribe follows [Semantic
 Versioning 2.0.0](https://semver.org/spec/v2.0.0.html): releases use
 `MAJOR.MINOR.PATCH` version numbers. Before `1.0.0`, minor releases may include
