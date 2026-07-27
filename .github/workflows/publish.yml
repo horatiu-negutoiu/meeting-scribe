@@ -65,6 +65,10 @@ jobs:
           name: python-distributions
           path: dist/
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

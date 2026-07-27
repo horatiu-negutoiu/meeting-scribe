@@ -55,8 +55,8 @@ Clone the repository, then let `uv` create the environment and install the
 package:
 
 ```console
-git clone https://github.com/horatiu-negutoiu/meeting-scribe.git
-cd meeting-scribe
+git clone https://github.com/horatiu-negutoiu/meeting-transcribe.git
+cd meeting-transcribe
 uv sync
 ```
 
@@ -279,7 +279,8 @@ generation, and atomic Markdown artifact creation with a fake SDK client.
 
 ## Releases and versioning
 
-The first public release is `0.1.0`. Meeting Scribe follows [Semantic
+The first production PyPI release is `0.1.1`; `0.1.0` is TestPyPI-only. Meeting
+Scribe follows [Semantic
 Versioning 2.0.0](https://semver.org/spec/v2.0.0.html): releases use
 `MAJOR.MINOR.PATCH` version numbers. Before `1.0.0`, minor releases may include
 breaking changes; patch releases contain compatible bug fixes only. Starting

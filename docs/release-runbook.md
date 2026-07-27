@@ -14,7 +14,7 @@ token for this project.
    | --- | --- |
    | PyPI project name | `meeting-transcribe` |
    | GitHub owner | `horatiu-negutoiu` |
-   | GitHub repository | `meeting-scribe` |
+   | GitHub repository | `meeting-transcribe` |
    | Workflow filename | `publish.yml` |
    | Environment name | `testpypi` |
 
